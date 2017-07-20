@@ -110,13 +110,11 @@ impl PartialEq for SpecifiedUrl {
 
 impl ToCss for SpecifiedUrl {
     fn to_css<W>(&self, dest: &mut W) -> fmt::Result where W: fmt::Write {
-        let string = match self.original {
-            Some(ref original) => &**original,
-            None => match self.resolved {
-                Some(ref url) => url.as_str(),
-                // This can only happen if the url wasn't specified by the
-                // user *and* it's an invalid url that has been transformed
-                // back to specified value via the "uncompute" functionality.
+        let string = match self.resolved {
+            Some(ref resolved) => resolved.as_str(),
+            None => match self.original {
+                Some(ref original) => &**original,
+                // This can only happen if the url wasn't specified by the user
                 None => "about:invalid",
             }
         };
